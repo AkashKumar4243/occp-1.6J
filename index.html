@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCPP Control Panel</title>
+    <style>
+        button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>OCPP Control Panel</h1>
+    <button onclick="sendRequest('Authorize')">Authorize</button>
+    <button onclick="sendRequest('BootNotification')">Boot Notification</button>
+    <button onclick="sendRequest('DataTransfer')">Data Transfer</button>
+    <button onclick="sendRequest('DiagnosticsStatusNotification')">Diagnostics Status Notification</button>
+    <button onclick="sendRequest('FirmwareStatusNotification')">Firmware Status Notification</button>
+    <button onclick="sendRequest('Heartbeat')">Heartbeat</button>
+    <button onclick="sendRequest('MeterValues')">Meter Values</button>
+    <button onclick="sendRequest('StartTransaction')">Start Transaction</button>
+    <button onclick="sendRequest('StatusNotification')">Status Notification</button>
+    <button onclick="sendRequest('StopTransaction')">Stop Transaction</button>
+
+    <div id="response"></div>
+
+    <script>
+        function sendRequest(type) {
+            fetch('http://localhost:3001/ocpp-request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ type }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>
